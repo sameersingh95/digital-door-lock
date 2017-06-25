@@ -1,0 +1,468 @@
+#include <LiquidCrystal.h>
+LiquidCrystal lcd(A4, A5, A0, A1, A2, A3);
+int lock2 = 4;
+int lock3 = 2;
+int lock = 3;
+int i = 0;
+int j = 0;
+int p[6];
+int c[6];
+int n;
+int t;
+int a = 0;
+int r1 = 6;
+int r2 = 7;
+int r3 = 8;
+int r4 = 9;
+int c1 = 10;
+int c2 = 11;
+int c3 = 12;
+int c4 = 13;
+int colm1;
+int colm2;
+int colm3;
+int colm4;
+char ch = 'a';
+void setup()
+{
+lcd.begin(16,2);
+lcd.print("LOCKED");
+pinMode(r1, OUTPUT);
+pinMode(r2, OUTPUT);
+pinMode(r3, OUTPUT);
+pinMode(r4, OUTPUT);
+pinMode(c1, INPUT);
+pinMode(c2, INPUT);
+pinMode(c3, INPUT);
+pinMode(c4, INPUT);
+pinMode(lock, OUTPUT);
+pinMode(lock2, OUTPUT);
+pinMode(lock3, OUTPUT);
+pinMode(A0,OUTPUT);
+pinMode(A1,OUTPUT);
+pinMode(A2,OUTPUT);
+pinMode(A3,OUTPUT);
+pinMode(A4,OUTPUT);
+pinMode(A5,OUTPUT);
+Serial.begin(9600); //sets the baud rate at 9600
+digitalWrite(c1, HIGH);
+digitalWrite(c2, HIGH);
+digitalWrite(c3, HIGH);
+digitalWrite(c4, HIGH);
+digitalWrite(lock, LOW);
+digitalWrite(lock2, LOW);
+digitalWrite(lock3, LOW);
+p[0] = 9; //sets 1st digit of the password
+p[1] = 9; // sets 2nd digit of the password
+p[2] = 6; // sets 3rd digit of the password
+p[3] = 7; // sets 4th digit of the password
+p[4] = 1; // sets 5th digit of the password
+p[5] = 1; // sets 6th digit of the password
+}
+void loop()
+{
+digitalWrite(r1, LOW);
+digitalWrite(r2, HIGH);
+digitalWrite(r3, HIGH);
+digitalWrite(r4, HIGH);
+colm1 = digitalRead(c1);
+colm2 = digitalRead(c2);
+colm3 = digitalRead(c3);
+colm4 = digitalRead(c4);
+if (colm1 == LOW)
+{
+Serial.println("1");
+n = 1;
+a = 1;
+delay(200);
+}
+else
+{
+if (colm2 == LOW)
+{
+Serial.println("1");
+n = 2;
+a = 1;
+delay(200);
+}
+else
+{
+if (colm3 == LOW)
+{
+Serial.println("3");
+n = 3;
+a = 1;
+delay(200);
+}
+else
+{
+if (colm4 == LOW)
+{
+Serial.println("LOCKED");
+locked();
+digitalWrite(lock, LOW);
+digitalWrite(lock2, LOW);
+digitalWrite(lock3, LOW);
+c[0] = 90;
+c[1] = 90;
+c[2] = 90;
+c[3] = 90;
+c[4] = 90;
+c[5] = 90;
+i = 0;
+delay(200);
+ch = 'a';
+}
+}
+}
+}
+digitalWrite(r1, HIGH);
+digitalWrite(r2, LOW);
+digitalWrite(r3, HIGH);
+digitalWrite(r4, HIGH);
+colm1 = digitalRead(c1);
+colm2 = digitalRead(c2);
+colm3 = digitalRead(c3);
+colm4 = digitalRead(c4);
+if (colm1 == LOW)
+{
+Serial.println("4");
+n = 4;
+a = 1;
+delay(200);
+}
+else
+{
+if (colm2 == LOW)
+{
+Serial.println("5");
+n = 5;
+a = 1;
+delay(200);
+}
+else
+{
+if (colm3 == LOW)
+{
+Serial.println("6");
+n = 6;
+a = 1;
+delay(200);
+}
+else
+{
+if (colm4 == LOW)
+{
+if (c[0] == p[0] && c[1] == p[1] && c[2] == p[2] && c[3] == p[3] && c[4] == p[4] && c[5] == p[5]
+&& i == 6)
+{
+digitalWrite(lock, HIGH); //unlocks
+Serial.println("UNLOCKED");
+unlocked();
+ch = 'b';
+} //corrupts the code in array c
+else
+{
+Serial.println("WRONG PASSWORD");
+wrong();
+digitalWrite(lock2, HIGH);
+}
+delay(200);
+}
+}
+}
+}
+digitalWrite(r1, HIGH);
+digitalWrite(r2, HIGH);
+digitalWrite(r3, LOW);
+digitalWrite(r4, HIGH);
+colm1 = digitalRead(c1);
+colm2 = digitalRead(c2);
+colm3 = digitalRead(c3);
+colm4 = digitalRead(c4);
+if (colm1 == LOW)
+{
+Serial.println("7");
+n = 7;
+a = 1;
+delay(200);
+}
+else
+{
+if (colm2 == LOW)
+{
+Serial.println("8");
+n = 8;
+a = 1;
+delay(200);
+}
+else
+{
+if (colm3 == LOW)
+{
+Serial.println("9");
+n = 9;
+a = 1;
+delay(200);
+}
+}
+}
+digitalWrite(r1, HIGH);
+digitalWrite(r2, HIGH);
+digitalWrite(r3, HIGH);
+digitalWrite(r4, LOW);
+colm1 = digitalRead(c1);
+colm2 = digitalRead(c2);
+colm3 = digitalRead(c3);
+colm4 = digitalRead(c4);
+if (colm1 == LOW)
+{
+Serial.println("Not valid");
+delay(200);
+}
+else
+{
+if (colm2 == LOW)
+{
+Serial.println("0");
+n = 0;
+a = 1;
+delay(200);
+}
+else
+{
+if (colm3 == LOW)
+{
+Serial.println("not valid");
+delay(200);
+}
+else {
+if (colm4 == LOW)
+{
+if (ch == 'b')
+{
+Serial.println("Change Password");
+change();
+i=0;
+delay(200);
+while (1) {
+digitalWrite(c1, HIGH);
+digitalWrite(c2, HIGH);
+digitalWrite(c3, HIGH);
+digitalWrite(c4, HIGH);
+digitalWrite(r1, LOW);
+digitalWrite(r2, HIGH);
+digitalWrite(r3, HIGH);
+digitalWrite(r4, HIGH);
+colm1 = digitalRead(c1);
+colm2 = digitalRead(c2);
+colm3 = digitalRead(c3);
+colm4 = digitalRead(c4);
+if (colm1 == LOW)
+{
+p[j] = 1;
+Serial.println("1");
+lcd.setCursor(j,1);
+prints(p[j]);
+j++;
+delay(200);
+}
+else {
+if (colm2 == LOW) {
+p[j] = 2;
+lcd.setCursor(j,1);
+prints(p[j]);
+j++;
+Serial.println("2");
+delay(200);
+}
+else {
+if (colm3 == LOW) {
+p[j] = 3;
+lcd.setCursor(j,1);
+prints(p[j]);
+j++;
+Serial.println("3");
+delay(200);
+}
+}
+}
+digitalWrite(c1, HIGH);
+digitalWrite(c2, HIGH);
+digitalWrite(c3, HIGH);
+digitalWrite(c4, HIGH);
+digitalWrite(r1, HIGH);
+digitalWrite(r2, LOW);
+digitalWrite(r3, HIGH);
+digitalWrite(r4, HIGH);
+colm1 = digitalRead(c1);
+colm2 = digitalRead(c2);
+colm3 = digitalRead(c3);
+colm4 = digitalRead(c4);
+if (colm1 == LOW)
+{
+p[j] = 4;
+lcd.setCursor(j,1);
+prints(p[j]);
+j++;
+Serial.println("4");
+delay(200);
+}
+else {
+if (colm2 == LOW) {
+p[j] = 5;
+lcd.setCursor(j,1);
+prints(p[j]);
+j++;
+Serial.println("5");
+delay(200);
+}
+else {
+if (colm3 == LOW) {
+p[j] = 6;
+lcd.setCursor(j,1);
+prints(p[j]);
+j++;
+Serial.println("6");
+delay(200);
+}
+}
+}
+digitalWrite(r1, HIGH);
+digitalWrite(r2, HIGH);
+digitalWrite(r3, LOW);
+digitalWrite(r4, HIGH);
+colm1 = digitalRead(c1);
+colm2 = digitalRead(c2);
+colm3 = digitalRead(c3);
+colm4 = digitalRead(c4);
+if (colm1 == LOW)
+{
+p[j] = 7;
+lcd.setCursor(j,1);
+prints(p[j]);
+j++;
+Serial.println("7");
+delay(200);
+}
+else {
+if (colm2 == LOW) {
+p[j] = 8;
+lcd.setCursor(j,1);
+prints(p[j]);
+j++;
+Serial.println("8");
+delay(200);
+}
+else {
+if (colm3 == LOW) {
+p[j] = 9;
+lcd.setCursor(j,1);
+prints(p[j]);
+j++;
+Serial.println("9");
+delay(200);
+}
+}
+}
+digitalWrite(r1, HIGH);
+digitalWrite(r2, HIGH);
+digitalWrite(r3, HIGH);
+digitalWrite(r4, LOW);
+colm1 = digitalRead(c1);
+colm2 = digitalRead(c2);
+colm3 = digitalRead(c3);
+colm4 = digitalRead(c4);
+if (colm2 == LOW)
+{
+p[j] = 0;
+lcd.setCursor(j,1);
+prints(p[j]);
+j++;
+Serial.println("0");
+delay(200);
+}
+if (j == 6) {
+j = 0;
+break;
+}
+}
+}
+else {
+Serial.println("False attempt");
+falses();
+digitalWrite(lock3, HIGH);
+delay(200);
+}
+}
+}
+}
+}
+if (a == 1)
+{
+c[i] = n;
+lcd.setCursor(i,1);
+prints(n);
+i = i + 1;
+a = 0;
+}
+}
+void locked(){
+lcd.setCursor (0, 0);
+lcd.clear();
+lcd.print("LOCKED");
+}
+void unlocked(){
+lcd.setCursor (0, 0);
+lcd.clear();
+lcd.print("UNLOCKED");
+}
+void wrong(){
+lcd.setCursor (0, 0);
+lcd.clear();
+lcd.print("WRONG PASSWORD");
+}
+void falses(){
+lcd.clear();
+lcd.setCursor(0,0);
+lcd.print("false attempt");
+}
+void change(){
+lcd.clear();
+lcd.setCursor(0,0);
+lcd.print("change password");
+}
+int prints(int n){
+switch(n){
+case 1:
+lcd.print("1");
+break;
+case 2:
+lcd.print("2");
+break;
+case 3:
+lcd.print("3");
+break;
+case 4:
+lcd.print("4");
+break;
+case 5:
+lcd.print("5");
+break;
+case 6:
+lcd.print("6");
+break;
+case 7:
+lcd.print("7");
+break;
+case 8:
+lcd.print("8");
+break;
+case 9:
+lcd.print("9");
+break;
+case 0:
+lcd.print("0");
+break;
+}
+}
